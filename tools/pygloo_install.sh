@@ -20,9 +20,14 @@ PYTHON="python"
 PYGLOO_DIR="third_party/pygloo"
 
 check_bazel() {
-    if ! command -v $BAZEL_CMD &> /dev/null; then
+    echo "Running: command -v $BAZEL_CMD"
+    COMMAND_PATH=$(command -v $BAZEL_CMD)
+    echo "command -v $BAZEL_CMD returned: $COMMAND_PATH"
+    if [ -z "$COMMAND_PATH" ]; then
         echo "Error: Bazel is not installed. Please install Bazel >= 5.1.0."
         exit 1
+    else
+        echo "Bazel is installed at: $COMMAND_PATH"
     fi
 }
 

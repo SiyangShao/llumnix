@@ -13,10 +13,13 @@
 
 #!/bin/bash
 
-if ! command -v nvcc &> /dev/null
-then
-    echo "CUDA is not installed."
+COMMAND_PATH=$(command -v nvcc)
+echo "command -v nvcc returned: $COMMAND_PATH"
+if [ -z "$COMMAND_PATH" ]; then
+    echo "Error: CUDA is not installed. Please install CUDA."
     exit 1
+else
+    echo "CUDA is installed at: $COMMAND_PATH"
 fi
 
 CUDA_VERSION=$(nvcc --version | grep -oP 'V\d+\.\d+' | head -1 | tr -d 'V')
