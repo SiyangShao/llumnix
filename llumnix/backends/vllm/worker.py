@@ -115,7 +115,7 @@ class MigrationWorker(Worker):
         total_kv_cache_size = len(src_blocks) * CacheEngine.get_cache_block_size(
             self.cache_config, self.model_config, self.parallel_config)
         speed = total_kv_cache_size/GiB_bytes/(end_time - start_time)
-        logger.info("[migration_cache] blocks_num: {}, total_kv_cache_size: {}, time: {}s, speed: {}GB/s."
+        logger.info("Migrate kv cache done, blocks_num: {}, total_kv_cache_size: {}, time: {}s, speed: {}GB/s."
                     .format(len(src_blocks), convert_bytes(total_kv_cache_size), end_time-start_time, speed))
 
     def do_recv(self, *args, **kwargs):
@@ -141,9 +141,5 @@ class MigrationWorker(Worker):
 
     def shutdown(self) -> None:
         torch.cuda.synchronize()
-        del self.model_runner
-        del self.cache_engine
-        del self.gpu_cache
-        del self.migration_backend
         torch.cuda.empty_cache()
         torch.cuda.reset_max_memory_allocated()
